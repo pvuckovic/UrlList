@@ -1,92 +1,106 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.IO;
-using System.Text.Json;
-using UrlList.Api.Repositories;
+using System;
+using System.Linq;
+using UrlList.Api.Interfaces;
+using UrlList.Api.MyDbContext;
 using UrlList.Api.Requests;
 using UrlList.Api.Responses;
 
 namespace UrlList.Api.Controllers
 {
-    [ApiController]
     [Route("api/[controller]")]
+    [ApiController]
     public class UrlListController : ControllerBase
     {
-       
+        private readonly IUrlListRepository _urlListRepository;
+
+        public UrlListController(IUrlListRepository urlListRepository)
+        {
+            _urlListRepository = urlListRepository;
+        }
 
         [HttpGet]
-
-        public ActionResult GetUrlList([FromQuery] string? title)
+        [Route("{title}")]
+        public ActionResult GetUrlList(string title)
         {
-            //TODO AT Check title parametar is null or empty if not correct return bad request with message
-            //var result = GetUrlList(title);
-
             if (string.IsNullOrEmpty(title))
             {
                 return BadRequest("Title parametar is empty or null. Try again.");
             }
 
+            var targetUrlList = _urlListRepository.GetUrlList(title);
 
-            //If required url list exist return Ok otherwise return NotFound 404            
-            var urlLists = new UrlListResponse();
-                       
-            if (urlLists == null)
+            if (targetUrlList == null)
             {
-                return NotFound();
+                return NotFound($"Required url list with title {title} is not found.");
             }
-                                                                                           
-            //TODO FJ If title parametar is fine than call repository to get urlList
-            var urlList = new UrlListResponse(); //temp variable should be fill with real data
 
-
-            return Ok(urlList);
+            var result = new UrlListResponse
+            {
+                Title = targetUrlList.Title,
+                Description = targetUrlList.Description,
+                UrlItems = targetUrlList.UrlItems.Select(x => new UrlItem
+                {
+                    Title = x.Title,
+                    Description = x.Description,
+                    Url = x.Url
+                }).ToList()
+            };
+            return Ok(result);
         }
 
-
-
         [HttpPost]
-
-        public ActionResult PostUrlList([FromBody] UrlListRequest urlRequest)
+        [Route("posturllist")]
+        public ActionResult PostUrlList([FromBody] UrlListRequest urlListRequest)
         {
-
-            //TODO AT Validate urllist request object            
-            if (urlRequest == null)
+            if (urlListRequest == null)
             {
                 return BadRequest("The object cant be null.");
             }
-            
-            //Validate that all fields are not null or empty
-            //Title and description cant be null or empty and UrlItem List should have at least one member
-            if (string.IsNullOrEmpty(urlRequest.Title))
+
+            if (string.IsNullOrEmpty(urlListRequest.Title))
             {
                 return BadRequest("Title can not be empty.");
             }
 
-            if (string.IsNullOrEmpty(urlRequest.Description))
+            if (string.IsNullOrEmpty(urlListRequest.Description))
             {
                 return BadRequest("Descritpion can not be empty.");
             }
 
-            if (urlRequest.UrlItems != null && urlRequest.UrlItems.Count == 0)
+            if (urlListRequest.UrlItems != null && urlListRequest.UrlItems.Count == 0)
             {
                 return BadRequest("Url list should have at least one member.");
             }
-                      
-            //Before repository implemented try recording data into text file
 
-            string jsonString = JsonSerializer.Serialize(urlRequest);
+            var targetUrlList = _urlListRepository.GetUrlList(urlListRequest.Title);
 
-            using (StreamWriter writer = new StreamWriter("UrlListProject.txt", true)) //// true to append data to the file
+            if (targetUrlList == null)
             {
-                writer.WriteLine(jsonString);
+                try
+                {
+                    _urlListRepository.InsertUrlList(new Models.UrlListModel
+                    {
+                        Description = urlListRequest.Description,
+                        Title = urlListRequest.Title,
+                        UrlItems = urlListRequest.UrlItems.Select(x => new Models.UrlItemModel
+                        {
+                            Title = x.UrlTitle,
+                            Description = x.UrlDescription,
+                            Url = x.Url
+                        }).ToList()
+                    });
+                }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, $"Exception occured. Details: {ex.Message}");
+                }
+                return Ok($"UrlList with title {urlListRequest} is inserted.");
             }
-
-            //TODO FJ If all checks passed call repository to insert URL List
-            //Add try/catche block around insert operation
-            //If there is exception return error message otherwise return Ok
-
-            return Ok();
+            else
+            {
+                return Ok($"UrlList with title {urlListRequest} is already inserted.");
+            }
         }
-       
     }
-    
 }

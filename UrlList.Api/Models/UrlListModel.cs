@@ -1,15 +1,15 @@
 ﻿using System.Collections.Generic;
 
-namespace UrlList.Api.Responses
+namespace UrlList.Api.Models
 {
-    public class UrlListResponse
+    public class UrlListModel
     {
         public string Title { get; set; }
         public string Description { get; set; }
-        public List<UrlItem> UrlItems { get; set; }
+        public List<UrlItemModel> UrlItems { get; set; }
     }
 
-    public class UrlItem
+    public class UrlItemModel
     {
         public string Url { get; set; }
         public string Description { get; set; }
