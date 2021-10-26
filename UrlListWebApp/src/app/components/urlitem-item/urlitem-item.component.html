@@ -1,0 +1,5 @@
+<div class="item">
+    <h3>{{ item.title }} <fa-icon (click)="onDelete(item)" [ngStyle]="{color:'#20AE96'}" [icon]="faTimes"></fa-icon></h3>
+    <p>{{ item.description }}</p>
+    <p (click)="goToUrl()">{{ item.url }}</p>
+</div>

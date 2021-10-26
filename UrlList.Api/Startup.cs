@@ -16,9 +16,22 @@ namespace UrlList.Api
         }
 
         public IConfiguration Configuration { get; }
-
+        readonly string AllowSpecificOrigins = "_allowSpecificOrigins";
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200").AllowAnyHeader();
+                                  });
+            });
+            /*services.AddCors(options =>
+            {
+                options.AddPolicy("AllowAllOrigins",
+                    builder => builder.AllowAnyOrigin().AllowAnyHeader());
+            });*/
             services.AddControllers();            
             services.AddHttpClient();
             services.AddSingleton<IUrlListRepository, UrlListRepository>();
@@ -32,7 +45,7 @@ namespace UrlList.Api
             }
 
             app.UseRouting();
-
+            app.UseCors(AllowSpecificOrigins);
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

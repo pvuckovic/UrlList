@@ -50,7 +50,7 @@ namespace UrlList.Api.Controllers
         }
 
         [HttpPost]
-        [Route("posturllist")]
+        [Route("")]
         public ActionResult PostUrlList([FromBody] UrlListRequest urlListRequest)
         {
             if (urlListRequest == null)
@@ -95,11 +95,13 @@ namespace UrlList.Api.Controllers
                 {
                     return StatusCode(500, $"Exception occured. Details: {ex.Message}");
                 }
-                return Ok($"UrlList with title {urlListRequest} is inserted.");
+                //return Ok($"UrlList with title {urlListRequest.Title} is inserted.");
+                targetUrlList = _urlListRepository.GetUrlList(urlListRequest.Title);
+                return Ok(targetUrlList);
             }
             else
             {
-                return Ok($"UrlList with title {urlListRequest} is already inserted.");
+                return Ok($"UrlList with title {urlListRequest.Title} is already inserted.");
             }
         }
     }
