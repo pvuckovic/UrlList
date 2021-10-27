@@ -1,8 +1,7 @@
-<a routerLink ="/" class="btn btn-block" style="background-color: #FAA340">Back</a>
-
 <div class="container" style="background-color: #F5F2F2; text-align: center;">
-    <div style="max-width: 50%; margin-left: 457px; text-align: left;">
+    <div style="max-width: 50%; margin-left: 430px; text-align: left;"> <!-- 343-->
       <app-items [items]="urlListService.selectedUrlList.urlItems"></app-items>
     </div>
     <router-outlet></router-outlet>
   </div>
+  <a routerLink ="/" class="btn btn-block" style="background-color: #FAA340; padding: 3px;">Back   <fa-icon [icon]="faBackward"></fa-icon></a>

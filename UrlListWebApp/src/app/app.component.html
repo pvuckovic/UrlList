@@ -2,13 +2,12 @@
   <app-header style="background-color: #F5F2F2;"></app-header>
   <app-list-content *ngIf="hasRoute('/list-page')"></app-list-content>
   <app-form-urllist (onPublishList)="publishList($event)"></app-form-urllist>
-  <!--<app-button color=" #20AE96" text="Publish" (btnClick)="toggleAddList($event)"></app-button>-->
 </div>
 
 <div class="container" style="background-color: #F5F2F2; text-align: center;">
   <app-form-urlitem (onAddItem)="addItem($event)" ></app-form-urlitem>
-  <h2 style="color: #20AE96; margin: 35px 0 15px 0; text-align: center;">Links</h2>
-  <div style="max-width: 50%; margin-left: 457px; text-align: left;">
+  <h2 style="color: #20AE96; margin: 30px 0 15px 0; text-align: center;">Links <fa-icon [icon]="faArrowAltCircleDown"></fa-icon></h2>
+  <div style="max-width: 50%; margin-left: 457px; text-align: left;"> <!-- 383-->
     <app-items [items]="items"></app-items>
   </div>
   <router-outlet></router-outlet>

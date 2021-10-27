@@ -5,10 +5,6 @@
     cursor: pointer;
   }
   
-.item.reminder {
-    border-left: 5px solid green;
-  }
-  
 .item h3 {
     display: flex;
     align-items: center;
