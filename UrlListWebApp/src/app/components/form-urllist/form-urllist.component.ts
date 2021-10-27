@@ -21,6 +21,11 @@ export class FormUrllistComponent implements OnInit {
       alert('Please add a title!');
       return;
     }
+    if(!this.Description) {
+      alert('Please add a description!');
+      return;
+    }
+    
     const newList: PostUrlListRequest = {
       Title: this.Title, 
       Description: this.Description, 
@@ -30,8 +35,6 @@ export class FormUrllistComponent implements OnInit {
 
     this.Title = '';
     this.Description = '';
-  
-  
   }
     
   hasRoute(route: string) {

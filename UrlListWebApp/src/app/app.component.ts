@@ -3,6 +3,7 @@ import { Item } from './models/Item';
 import { UrlListService } from './services/urlList.service';
 import { PostUrlListRequest } from './models/PostUrlListRequest';
 import { Router } from '@angular/router';
+import { faArrowAltCircleDown, faPlus } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-root',
@@ -16,6 +17,8 @@ export class AppComponent {
   Title: string = '';
   Description: string = '';
   currentTitle: string = '';  
+  faArrowAltCircleDown = faArrowAltCircleDown;
+  faPlus = faPlus;
 
   constructor(private urlListService: UrlListService, private router: Router) {
   }
@@ -41,7 +44,6 @@ export class AppComponent {
       console.log(response);
       this.router.navigate([`list-page/${response.title}`]);
     });
-    //console.log("PV_debug",value); 
   }
 
   hasRoute(route: string) {

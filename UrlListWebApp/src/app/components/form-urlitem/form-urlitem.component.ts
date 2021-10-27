@@ -19,6 +19,14 @@ export class FormUrlitemComponent implements OnInit {
 
   onSubmit() {
     if(!this.title) {
+      alert('Please add a title!');
+      return;
+    }
+    if(!this.description) {
+      alert('Please add a description!');
+      return;
+    }
+    if(!this.url) {
       alert('Please add a link!');
       return;
     }

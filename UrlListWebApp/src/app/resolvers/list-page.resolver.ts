@@ -7,14 +7,6 @@ import { tap } from 'rxjs/operators';
 export class ListPageResolver {
   constructor(private urlListService: UrlListService) {}
 
-  // resolve(route: ActivatedRouteSnapshot) {
-  //   const title = route.paramMap.get('title');
-  //   return this.urlListService.getList(title!).subscribe(((response) => {
-  //       this.urlListService.selectedUrlList = response;
-  //     })
-  //   )
-  // }
-
   resolve(route: ActivatedRouteSnapshot) {
     const title = route.paramMap.get('title');
     return this.urlListService.getList(title!).pipe(

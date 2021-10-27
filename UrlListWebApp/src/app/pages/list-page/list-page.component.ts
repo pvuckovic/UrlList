@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRouteSnapshot, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { UrlListService } from 'src/app/services/urlList.service';
+import { faBackward } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-list-page',
@@ -8,11 +9,11 @@ import { UrlListService } from 'src/app/services/urlList.service';
   styleUrls: ['./list-page.component.css']
 })
 export class ListPageComponent implements OnInit {
+  faBackward = faBackward;
 
   constructor(private router: Router, public urlListService: UrlListService) { }
 
   ngOnInit(): void {
-    //console.log(this.urlListService.selectedUrlList)
   }
   
   hasRoute(route: string) {
